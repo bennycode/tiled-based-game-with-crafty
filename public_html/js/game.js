@@ -5,9 +5,11 @@ function initGame(map) {
   Crafty.e("2D, DOM, TiledMapBuilder")
           .setMapDataSource(map)
           .createWorld(function(tiledMap) {
-            // Init chest
-            var chest = tiledMap.getEntitiesInLayer('chest')[0];
-            chest.addComponent("Collision, Chest").collision();
+            // Init chests
+            var chests = tiledMap.getEntitiesInLayer('chest');
+            for (var i = 0; i < chests.length; i++) {
+              chests[i].addComponent("Collision, Chest").collision();
+            }
 
             // Init stones
             var stones = tiledMap.getEntitiesInLayer('stones');
@@ -34,7 +36,8 @@ function initGame(map) {
     if (this.hit('Stone')) {
       this.attr({x: from.x, y: from.y});
     }
-    else if (this.hit('Chest')) {
+
+    if (this.hit('Chest')) {
       console.log('You won!');
     }
   });

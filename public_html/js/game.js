@@ -18,10 +18,23 @@ function initGame(map) {
             }
           });
 
+  // Sprites
   // column, row (0-index-based)
   Crafty.sprite(32, "images/characters.png", {
     Player: [5, 3],
     Monster: [5, 2]
+  });
+
+  Crafty.sprite(32, "images/coin_gold.png", {
+    Gold: [0, 0]
+  });
+
+  Crafty.sprite(32, "images/coin_silver.png", {
+    Silver: [0, 0]
+  });
+
+  Crafty.sprite(32, "images/coin_copper.png", {
+    Copper: [0, 0]
   });
 
   // Configs
@@ -69,7 +82,7 @@ function initGame(map) {
   });
 
   // Animate monster
-  window.setInterval(function() {
+  window.monsterMovement = window.setInterval(function() {
     if (monster.isMovingDown) {
       if (monster.y < 416) {
         monster.move("s", 32);
@@ -87,15 +100,6 @@ function initGame(map) {
     }
   }, 50);
 
-  // Gold chest
-  Crafty.sprite(32, "images/coin_gold.png", {
-    Gold: [0, 0]
-  });
-
-  var gold = Crafty.e("2D, Canvas, Gold, SpriteAnimation")
-          .attr({x: 544, y: 416})
-          .reel('GoldMoving', 1000, 0, 0, 8)
-          .animate('GoldMoving', -1);
 
   // Player
   var player = Crafty.e();
@@ -113,7 +117,27 @@ function initGame(map) {
 
     if (this.hit('Chest')) {
       resultText.text('You won!');
-      Crafty.pause();
+
+      if (deaths === 0) {
+        var gold = Crafty.e("2D, Canvas, Gold, SpriteAnimation")
+                .attr({x: 544, y: 416})
+                .reel('GoldMoving', 1000, 0, 0, 8)
+                .animate('GoldMoving', -1);
+      } else if (deaths < 3) {
+        var silver = Crafty.e("2D, Canvas, Silver, SpriteAnimation")
+                .attr({x: 544, y: 416})
+                .reel('SilverMoving', 1000, 0, 0, 8)
+                .animate('SilverMoving', -1);
+      } else {
+        var copper = Crafty.e("2D, Canvas, Copper, SpriteAnimation")
+                .attr({x: 544, y: 416})
+                .reel('CoperMoving', 1000, 0, 0, 8)
+                .animate('CoperMoving', -1);
+      }
+
+      // Crafty.pause();
+      player.fourway(0);
+      window.clearInterval(window.monsterMovement);
     }
   });
 }

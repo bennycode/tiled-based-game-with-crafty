@@ -2,7 +2,7 @@ function initGame(map) {
   Crafty.init(640, 480, document.getElementById('game'));
   Crafty.background("black");
   Crafty.canvas.init();
-  Crafty.e("2D, DOM, TiledMapBuilder")
+  Crafty.e("2D, Canvas, TiledMapBuilder")
           .setMapDataSource(map)
           .createWorld(function(tiledMap) {
             // Init chests
@@ -38,6 +38,16 @@ function initGame(map) {
     h: 32
   };
 
+
+
+  // Text
+  var text = Crafty.e("2D, DOM, Text")
+          .textColor('#FFFFFF', 1)
+          .textFont({size: '72px', weight: 'bold'})
+          .unselectable();
+  text.attr({x: 240, y: 100});
+
+  // Monster
   var monster = Crafty.e();
   monster.addComponent("2D, Canvas, Monster, Collision");
   monster.attr(monsterConfig);
@@ -45,6 +55,8 @@ function initGame(map) {
     player.x = playerConfig.x;
     player.y = playerConfig.y;
   });
+
+  // Animate monster
   window.setInterval(function() {
     if (monster.y < 64) {
       monster.move("s", 32);
@@ -53,6 +65,7 @@ function initGame(map) {
     }
   }, 1000);
 
+  // Player
   var player = Crafty.e();
   player.addComponent("2D, Canvas, Player, Fourway, Collision");
   player.attr(playerConfig).fourway(4).bind('Moved', function(from) {
@@ -65,7 +78,8 @@ function initGame(map) {
     }
 
     if (this.hit('Chest')) {
-      console.log('You won!');
+      text.text('You won!');
+      Crafty.pause();
     }
   });
 }

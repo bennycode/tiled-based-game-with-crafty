@@ -5,8 +5,10 @@ function initGame(map) {
   Crafty.e("2D, DOM, TiledMapBuilder")
           .setMapDataSource(map)
           .createWorld(function(tiledMap) {
+
+
             // Init chests
-            var chests = tiledMap.getEntitiesInLayer('chest');
+            var chests = tiledMap.getEntitiesInLayer('chests');
             for (var i = 0; i < chests.length; i++) {
               chests[i].addComponent("Collision, Chest").collision();
             }
@@ -32,6 +34,7 @@ function initGame(map) {
 
   var player = Crafty.e();
   player.addComponent("2D, Canvas, hero1, Fourway, Collision");
+  // http://craftyjs.com/api/Collision.html
   player.attr(playerConfig).fourway(4).bind('Moved', function(from) {
     if (this.hit('Stone')) {
       this.attr({x: from.x, y: from.y});

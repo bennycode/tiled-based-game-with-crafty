@@ -35,10 +35,9 @@ function initGame(map) {
     x: 448,
     y: 32,
     w: 32,
-    h: 32
+    h: 32,
+    isMovingDown: true
   };
-
-
 
   // Text
   var text = Crafty.e("2D, DOM, Text")
@@ -58,12 +57,22 @@ function initGame(map) {
 
   // Animate monster
   window.setInterval(function() {
-    if (monster.y < 64) {
-      monster.move("s", 32);
+    if (monster.isMovingDown) {
+      if (monster.y < 416) {
+        monster.move("s", 32);
+      } else {
+        monster.isMovingDown = false;
+        monster.move("n", 32);
+      }
     } else {
-      monster.move("n", 32);
+      if (monster.y > 32) {
+        monster.move("n", 32);
+      } else {
+        monster.isMovingDown = true;
+        monster.move("s", 32);
+      }
     }
-  }, 1000);
+  }, 50);
 
   // Player
   var player = Crafty.e();

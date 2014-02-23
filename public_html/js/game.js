@@ -24,6 +24,7 @@ function initGame(map) {
     Monster: [5, 2]
   });
 
+  // Configs
   var playerConfig = {
     x: 32,
     y: 32,
@@ -39,18 +40,30 @@ function initGame(map) {
     isMovingDown: true
   };
 
-  // Text
-  var text = Crafty.e("2D, DOM, Text")
+  var deaths = 0;
+
+  // Texts
+  var deathText = Crafty.e("2D, Canvas, Text")
+          .textColor('#FFFFFF', 1)
+          .textFont({size: '18px', weight: 'bold'})
+          .unselectable()
+          .attr({x: 8, y: 4})
+          .text('Deaths: ' + deaths.toString());
+
+  var resultText = Crafty.e("2D, DOM, Text")
           .textColor('#FFFFFF', 1)
           .textFont({size: '72px', weight: 'bold'})
-          .unselectable();
-  text.attr({x: 240, y: 100});
+          .unselectable()
+          .attr({x: 240, y: 100});
 
   // Monster
   var monster = Crafty.e();
   monster.addComponent("2D, Canvas, Monster, Collision");
   monster.attr(monsterConfig);
   monster.onHit("Player", function(hit) {
+    ++deaths;
+    deathText.text('Deaths: ' + deaths.toString());
+
     player.x = playerConfig.x;
     player.y = playerConfig.y;
   });
@@ -84,10 +97,12 @@ function initGame(map) {
 
     if (this.hit('Monster')) {
       this.attr({x: playerConfig.x, y: playerConfig.y});
+      ++deaths;
+      deathText.text('Deaths: ' + deaths.toString());
     }
 
     if (this.hit('Chest')) {
-      text.text('You won!');
+      resultText.text('You won!');
       Crafty.pause();
     }
   });

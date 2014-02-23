@@ -87,6 +87,16 @@ function initGame(map) {
     }
   }, 50);
 
+  // Gold chest
+  Crafty.sprite(32, "images/coin_gold.png", {
+    Gold: [0, 0]
+  });
+
+  var gold = Crafty.e("2D, Canvas, Gold, SpriteAnimation")
+          .attr({x: 544, y: 416})
+          .reel('GoldMoving', 1000, 0, 0, 8)
+          .animate('GoldMoving', -1);
+
   // Player
   var player = Crafty.e();
   player.addComponent("2D, Canvas, Player, Fourway, Collision");

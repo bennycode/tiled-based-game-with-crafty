@@ -52,6 +52,22 @@ function initGame(map) {
     h: 32,
     isMovingDown: true
   };
+  
+  var monsterConfig2 = {
+    x: 160,
+    y: 32,
+    w: 32,
+    h: 32,
+    isMovingDown: true
+  };
+  
+   var monsterConfig3 = {
+    x: 320,
+    y: 416,
+    w: 32,
+    h: 32,
+    isMovingDown: false
+  };
 
   var deaths = 0;
 
@@ -80,12 +96,38 @@ function initGame(map) {
     player.x = playerConfig.x;
     player.y = playerConfig.y;
   });
+  
+   // Monster 2
+  var monster2 = Crafty.e();
+  monster2.addComponent("2D, Canvas, Monster, Collision");
+  monster2.attr(monsterConfig2);
+  monster2.onHit("Player", function(hit) {
+    ++deaths;
+    deathText.text('Deaths: ' + deaths.toString());
+
+    player.x = playerConfig.x;
+    player.y = playerConfig.y;
+  });
+  
+    // Monster 3
+  var monster3 = Crafty.e();
+  monster3.addComponent("2D, Canvas, Monster, Collision");
+  monster3.attr(monsterConfig3);
+  monster3.onHit("Player", function(hit) {
+    ++deaths;
+    deathText.text('Deaths: ' + deaths.toString());
+
+    player.x = playerConfig.x;
+    player.y = playerConfig.y;
+  });
+
 
   // Animate monster
   window.monsterMovement = window.setInterval(function() {
     if (monster.isMovingDown) {
       if (monster.y < 416) {
         monster.move("s", 32);
+        
       } else {
         monster.isMovingDown = false;
         monster.move("n", 32);
@@ -96,6 +138,44 @@ function initGame(map) {
       } else {
         monster.isMovingDown = true;
         monster.move("s", 32);
+      }
+    }
+  }, 50);
+  
+  window.monster2Movement = window.setInterval(function() {
+    if (monster2.isMovingDown) {
+      if (monster2.y < 416) {
+        monster2.move("s", 32);
+        
+      } else {
+        monster2.isMovingDown = false;
+        monster2.move("n", 32);
+      }
+    } else {
+      if (monster2.y > 32) {
+        monster2.move("n", 32);
+      } else {
+        monster2.isMovingDown = true;
+        monster2.move("s", 32);
+      }
+    }
+  }, 50);
+  
+  window.monster3Movement = window.setInterval(function() {
+    if (monster3.isMovingDown) {
+      if (monster3.y < 416) {
+        monster2.move("s", 32);
+        
+      } else {
+        monster3.isMovingDown = false;
+        monster2.move("n", 32);
+      }
+    } else {
+      if (monster3.y > 32) {
+        monster3.move("n", 32);
+      } else {
+        monster3.isMovingDown = true;
+        monster3.move("s", 32);
       }
     }
   }, 50);
@@ -138,6 +218,8 @@ function initGame(map) {
       // Crafty.pause();
       player.fourway(0);
       window.clearInterval(window.monsterMovement);
+      window.clearInterval(window.monster2Movement);
+      window.clearInterval(window.monster3Movement);
     }
   });
 }

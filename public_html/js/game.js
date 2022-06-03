@@ -1,5 +1,5 @@
-function initGame(map) {
-  Crafty.init(640, 480, document.getElementById('game'));
+function initGame(area, map) {
+  Crafty.init(area.getWidth(), area.getHeight(), area.getElement());
   Crafty.background("black");
   Crafty.canvas.init();
   Crafty.e("2D, Canvas, TiledMapBuilder")
